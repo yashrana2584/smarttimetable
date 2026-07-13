@@ -4,19 +4,34 @@ const ProjectContext = createContext();
 
 const initialProject = {
   projectId: "",
+
   projectName: "",
-  academicYear: "",
+
+  description: "",
 
   university: {
-  name: "",
-  department: "",
-  semester: "",
-  divisions: 1,
-},
-  workingDays: {
-  selected: [],
-  weeklyHoliday: "Sunday",
-},
+    name: "",
+
+    department: null,
+
+    program: null,
+
+    academicYear: "",
+
+    semester: "",
+  },
+
+  workingSchedule: {
+    activeDays: [],
+
+    holidayStrategy: "AI",
+
+    fixedHoliday: null,
+
+    allowAlternateSaturday: false,
+
+    maxLecturesPerDay: 7,
+  },
 
   lectureSlots: [],
 
@@ -32,20 +47,167 @@ const initialProject = {
     optimizeFacultyTime: true,
     avoidConflicts: true,
     balanceWorkload: true,
+    preferMorningLabs: false,
+    minimizeRoomChanges: true,
   },
 
   timetable: null,
+
+  metadata: {
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  version: "1.0.0",
+},
 };
 
 export function ProjectProvider({ children }) {
   const [project, setProject] = useState(initialProject);
 
   const updateProject = (updates) => {
-    setProject((prev) => ({
-      ...prev,
+  setProject((prev) => ({
+    ...prev,
+    ...updates,
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+  const updateUniversity = (updates) => {
+  setProject((prev) => ({
+    ...prev,
+    university: {
+      ...prev.university,
       ...updates,
-    }));
-  };
+    },
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const updateWorkingSchedule = (updates) => {
+  setProject((prev) => ({
+    ...prev,
+    workingSchedule: {
+      ...prev.workingSchedule,
+      ...updates,
+    },
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const updateAiSettings = (updates) => {
+  setProject((prev) => ({
+    ...prev,
+    aiSettings: {
+      ...prev.aiSettings,
+      ...updates,
+    },
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const addLectureSlot = () => {
+  setProject((prev) => ({
+    ...prev,
+    lectureSlots: [
+      ...prev.lectureSlots,
+      {
+        id: crypto.randomUUID(),
+        type: "lecture",
+        title: "Lecture",
+        startTime: "",
+        endTime: "",
+      },
+    ],
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const addShortBreak = () => {
+  setProject((prev) => ({
+    ...prev,
+    lectureSlots: [
+      ...prev.lectureSlots,
+      {
+        id: crypto.randomUUID(),
+        type: "break",
+        breakType: "short",
+        title: "Short Break",
+        startTime: "",
+        endTime: "",
+      },
+    ],
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const addLunchBreak = () => {
+  setProject((prev) => ({
+    ...prev,
+    lectureSlots: [
+      ...prev.lectureSlots,
+      {
+        id: crypto.randomUUID(),
+        type: "break",
+        breakType: "lunch",
+        title: "Lunch Break",
+        startTime: "",
+        endTime: "",
+      },
+    ],
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const updateLectureSlot = (id, updates) => {
+  setProject((prev) => ({
+    ...prev,
+    lectureSlots: prev.lectureSlots.map((slot) =>
+      slot.id === id
+        ? {
+            ...slot,
+            ...updates,
+          }
+        : slot
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const deleteLectureSlot = (id) => {
+  setProject((prev) => ({
+    ...prev,
+    lectureSlots: prev.lectureSlots.filter(
+      (slot) => slot.id !== id
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
 
   const completion = useMemo(() => {
     let completed = 0;
@@ -53,7 +215,7 @@ export function ProjectProvider({ children }) {
 
     if (project.projectName) completed++;
     if (project.university.name) completed++;
-    if (project.workingDays.length) completed++;
+    if (project.workingSchedule.activeDays.length) completed++;
     if (project.lectureSlots.length) completed++;
     if (project.subjects.length) completed++;
     if (project.faculty.length) completed++;
@@ -62,11 +224,22 @@ export function ProjectProvider({ children }) {
     return Math.round((completed / total) * 100);
   }, [project]);
 
-  const value = {
-    project,
-    updateProject,
-    completion,
-  };
+ const value = {
+  project,
+
+  updateProject,
+  updateUniversity,
+  updateWorkingSchedule,
+  updateAiSettings,
+
+  addLectureSlot,
+  addShortBreak,
+  addLunchBreak,
+  updateLectureSlot,
+  deleteLectureSlot,
+
+  completion,
+};
 
   return (
     <ProjectContext.Provider value={value}>
