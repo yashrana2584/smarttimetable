@@ -1,5 +1,5 @@
 import LandingPage from "../pages/Landing/LandingPage";
-import WorkspacePage from "../pages/Workspace/WorkspacePage";
+import SetupPage from "../pages/Setup/SetupPage";
 
 const routes = [
   {
@@ -7,8 +7,8 @@ const routes = [
     element: <LandingPage />,
   },
   {
-    path: "/workspace",
-    element: <WorkspacePage />,
+    path: "/setup",
+    element: <SetupPage />,
   },
 ];
 

@@ -27,7 +27,7 @@ export default function Hero() {
         <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
          <button
               type="button"
-              onClick={() => navigate("/workspace")}
+              onClick={() => navigate("/setup")}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-cobalt via-indigo to-violet px-8 py-4 font-display text-base font-semibold text-white shadow-lg shadow-indigo/30 transition-all duration-300 hover:shadow-xl hover:shadow-violet/40 hover:brightness-110 focus-visible:outline-none active:scale-[0.98] sm:w-auto"
           >
             Create New Timetable

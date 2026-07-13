@@ -8,12 +8,15 @@ const initialProject = {
   academicYear: "",
 
   university: {
-    name: "",
-    department: "",
-    semester: "",
-  },
-
-  workingDays: [],
+  name: "",
+  department: "",
+  semester: "",
+  divisions: 1,
+},
+  workingDays: {
+  selected: [],
+  weeklyHoliday: "Sunday",
+},
 
   lectureSlots: [],
 
