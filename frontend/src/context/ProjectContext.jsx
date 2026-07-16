@@ -1,5 +1,10 @@
-import { createContext, useContext, useMemo, useState } from "react";
-
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 const ProjectContext = createContext();
 
 const initialProject = {
@@ -61,7 +66,15 @@ const initialProject = {
 };
 
 export function ProjectProvider({ children }) {
-  const [project, setProject] = useState(initialProject);
+  const [project, setProject] = useState(() => {
+  const saved = localStorage.getItem("schedulai-project");
+
+  if (saved) {
+    return JSON.parse(saved);
+  }
+
+  return initialProject;
+});
 
   const updateProject = (updates) => {
   setProject((prev) => ({
@@ -209,6 +222,12 @@ const deleteLectureSlot = (id) => {
   }));
 };
 
+useEffect(() => {
+  localStorage.setItem(
+    "schedulai-project",
+    JSON.stringify(project)
+  );
+}, [project]);
   const completion = useMemo(() => {
     let completed = 0;
     const total = 7;

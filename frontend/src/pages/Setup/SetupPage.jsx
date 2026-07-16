@@ -27,6 +27,14 @@ const SetupPage = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const { project } = useProject();
 
+const isProjectDetailsComplete =
+  project.projectName.trim() !== "" &&
+  project.university.name.trim() !== "" &&
+  project.university.department !== null &&
+  project.university.program !== null &&
+  project.university.academicYear !== "" &&
+  project.university.semester !== "";
+
   const nextStep = () => {
   if (currentStep < 7) {
     setCurrentStep(currentStep + 1);
@@ -57,6 +65,9 @@ const previousStep = () => {
   onBack={previousStep}
   onNext={nextStep}
   disableBack={currentStep === 0}
+  disableNext={
+    currentStep === 0 && !isProjectDetailsComplete
+  }
   isLastStep={currentStep === 7}
 />
 

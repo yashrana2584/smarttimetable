@@ -10,10 +10,13 @@ const UniversityStep = () => {
   } = useProject();
 
   const selectedDepartment = DEPARTMENTS.find(
-    (dept) => dept.id === project.university.department
-  );
+  (dept) => dept.id === project.university.department
+);
 
-  const programOptions = selectedDepartment?.programs ?? [];
+const programOptions = selectedDepartment
+  ? selectedDepartment.programs
+  : [];
+
 
   return (
     <div className="space-y-8">
@@ -60,18 +63,17 @@ const UniversityStep = () => {
       <div className="grid grid-cols-2 gap-6">
 
         <SearchableSelect
-          label="Department"
-          placeholder="Search department..."
-          options={DEPARTMENTS}
-          value={project.university.department}
-          onChange={(id) =>
-            updateUniversity({
-              department: id,
-              program: null, // Reset program when department changes
-            })
-          }
-        />
-
+  label="Department"
+  placeholder="Search department..."
+  options={DEPARTMENTS}
+  value={project.university.department}
+  onChange={(id) =>
+    updateUniversity({
+      department: id,
+      program: null,
+    })
+  }
+/>
         <SearchableSelect
           label="Program"
           placeholder="Search program..."
