@@ -1,5 +1,7 @@
+import RoomList from "../../catalog/room/RoomList";
+
 const RoomsStep = () => {
-  return <div>Rooms Step</div>;
+  return <RoomList />;
 };
 
 export default RoomsStep;

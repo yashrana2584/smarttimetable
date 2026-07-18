@@ -222,6 +222,244 @@ const deleteLectureSlot = (id) => {
   }));
 };
 
+const addDivision = () => {
+  setProject((prev) => ({
+    ...prev,
+    divisions: [
+      ...prev.divisions,
+      {
+  id: crypto.randomUUID(),
+
+  name: `Division ${String.fromCharCode(65 + prev.divisions.length)}`,
+
+  shortName: String.fromCharCode(65 + prev.divisions.length),
+
+  semester: prev.university.semester || "",
+
+  strength: "",
+
+  shift: "Morning",
+
+  roomPreference: "",
+
+  sectionColor: "#06B6D4",
+
+  notes: "",
+}
+    ],
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const updateDivision = (id, updates) => {
+  setProject((prev) => ({
+    ...prev,
+    divisions: prev.divisions.map((division) =>
+      division.id === id
+        ? {
+            ...division,
+            ...updates,
+          }
+        : division
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const deleteDivision = (id) => {
+  setProject((prev) => ({
+    ...prev,
+    divisions: prev.divisions.filter(
+      (division) => division.id !== id
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const addSubject = () => {
+  setProject((prev) => ({
+    ...prev,
+    subjects: [
+      ...prev.subjects,
+      {
+    id: crypto.randomUUID(),
+
+    code: "",
+
+    name: "",
+
+    shortName: "",
+
+    type: "Theory",
+
+    lecturesPerWeek: 1,
+
+    practicalsPerWeek: 0,
+
+    credits: 1,
+
+    requiresLab: false,
+
+    preferredRoomType: "Any Classroom",
+
+    facultyIds: [],
+
+    divisionIds: [],
+
+    notes: "",
+}
+    ],
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const updateSubject = (id, updates) => {
+  setProject((prev) => ({
+    ...prev,
+    subjects: prev.subjects.map((subject) =>
+      subject.id === id
+        ? {
+            ...subject,
+            ...updates,
+          }
+        : subject
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+const deleteSubject = (id) => {
+  setProject((prev) => ({
+    ...prev,
+    subjects: prev.subjects.filter(
+      (subject) => subject.id !== id
+    ),
+    metadata: {
+      ...prev.metadata,
+      updatedAt: new Date().toISOString(),
+    },
+  }));
+};
+
+// ============================
+// Faculty CRUD
+// ============================
+
+const addFaculty = () => {
+  setProject((prev) => ({
+    ...prev,
+    faculty: [
+      ...prev.faculty,
+      {
+        id: crypto.randomUUID(),
+
+        employeeId: "",
+
+        name: "",
+
+        designation: "Assistant Professor",
+
+        email: "",
+
+        phone: "",
+
+        department: "",
+
+        subjectIds: [],
+
+        availableDays: [],
+
+        unavailableSlots: [],
+
+        maxLecturesPerDay: 4,
+
+        maxLecturesPerWeek: 20,
+
+        notes: "",
+      },
+    ],
+  }));
+};
+
+const updateFaculty = (id, updates) => {
+  setProject((prev) => ({
+    ...prev,
+    faculty: prev.faculty.map((faculty) =>
+      faculty.id === id
+        ? { ...faculty, ...updates }
+        : faculty
+    ),
+  }));
+};
+
+const deleteFaculty = (id) => {
+  setProject((prev) => ({
+    ...prev,
+    faculty: prev.faculty.filter(
+      (faculty) => faculty.id !== id
+    ),
+  }));
+};
+
+const addRoom = () => {
+  updateProject({
+    rooms: [
+      ...project.rooms,
+      {
+        id: crypto.randomUUID(),
+
+        roomNumber: "",
+        building: "",
+
+        type: "Classroom",
+        capacity: 60,
+
+        department: "",
+
+        hasProjector: false,
+        hasComputers: false,
+        hasInternet: false,
+        hasAC: false,
+
+        notes: "",
+      },
+    ],
+  });
+};
+
+const updateRoom = (id, updates) => {
+  updateProject({
+    rooms: project.rooms.map((room) =>
+      room.id === id
+        ? { ...room, ...updates }
+        : room
+    ),
+  });
+};
+
+const deleteRoom = (id) => {
+  updateProject({
+    rooms: project.rooms.filter(
+      (room) => room.id !== id
+    ),
+  });
+};
+
 useEffect(() => {
   localStorage.setItem(
     "schedulai-project",
@@ -243,6 +481,12 @@ useEffect(() => {
     return Math.round((completed / total) * 100);
   }, [project]);
 
+  const resetProject = () => {
+  localStorage.removeItem("schedulai-project");
+  localStorage.removeItem("schedulai-current-step");
+
+  setProject(initialProject);
+};
  const value = {
   project,
 
@@ -256,6 +500,19 @@ useEffect(() => {
   addLunchBreak,
   updateLectureSlot,
   deleteLectureSlot,
+  addDivision,
+updateDivision,
+deleteDivision,
+addSubject,
+updateSubject,
+deleteSubject,
+addFaculty,
+updateFaculty,
+deleteFaculty,
+addRoom,
+updateRoom,
+deleteRoom,
+resetProject,
 
   completion,
 };

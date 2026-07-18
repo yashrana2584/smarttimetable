@@ -1,5 +1,6 @@
 import LandingPage from "../pages/Landing/LandingPage";
 import SetupPage from "../pages/Setup/SetupPage";
+import TimetablePage from "../pages/Timetable/TimetablePage";
 
 const routes = [
   {
@@ -9,6 +10,10 @@ const routes = [
   {
     path: "/setup",
     element: <SetupPage />,
+  },
+  {
+    path: "/timetable",
+    element: <TimetablePage />,
   },
 ];
 
